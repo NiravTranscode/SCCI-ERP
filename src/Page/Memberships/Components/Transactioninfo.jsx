@@ -102,9 +102,9 @@ function Transactioninfo({ details, get }) {
                         </Flex>
                         <Divider />
                         <Select placeholder='Select option' name='type' onChange={handleChange} >
-                            <option value='membership'>Membership</option>
-                            <option value='bulletIn'>Bulletin</option>
-                            <option value='other'>Other</option>
+                            <option value='membership'>Anual membership fees</option>
+                            <option value='bulletIn'>Petron Bulletin Fees</option>
+                            <option value='other'>Otheres</option>
                         </Select>
                         <Input type='text' mt={4} placeholder='Enter Amount' value={body?.amount} name='amount' onChange={handleChange} />
                         <Input type='text' mt={4} placeholder='Description' value={body?.descripation} name='descripation' onChange={handleChange} />

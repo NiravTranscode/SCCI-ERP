@@ -97,7 +97,7 @@ function Filtermodel({ isOpen, onClose, categories, getFilterMember }) {
                         <SimpleGrid columns={2} spacing={10} mt={4}>
                             <Select placeholder='Type' name='membershipTypeFilter' onChange={handleChange} >
                                 <option value={'yearly'}>Yearly</option>
-                                <option value={'petron'}>Petron</option>
+                                <option value={'patron'}>Patron (life time)</option>
                             </Select>
                             <Select placeholder='Status' name='feesFilter' onChange={handleChange} >
                                 <option value={0}>Complete</option>

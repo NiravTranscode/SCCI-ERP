@@ -550,10 +550,6 @@ const Form3 = ({ values, setFieldValue, categories, handleAmountChange }) => {
         setFieldValue('endDate', moment(newEndDate).format('YYYY-MM-DD'));
     };
 
-    // const handleAmountChange = (event) => {
-    //   setAmount(event.target.value);
-    // };
-
     return (
         <>
             <Heading w="100%" textAlign={"center"} fontWeight="normal">
@@ -568,7 +564,7 @@ const Form3 = ({ values, setFieldValue, categories, handleAmountChange }) => {
                             </FormLabel>
                             <Field as={Select} {...field} id="membershipType">
                                 <option value="yearly">Yearly</option>
-                                <option value="petron">Petron</option>
+                                <option value="patron">Patron (life time)</option>
                             </Field>
 
                             <ErrorMessage
