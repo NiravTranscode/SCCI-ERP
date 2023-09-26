@@ -380,22 +380,43 @@ const Form2 = ({ values, setFieldValue }) => {
         </FormControl>
       </Flex>
       <FormControl as={GridItem} colSpan={[6, 6, null, 2]}>
-        <Field name="address">
-          {({ field }) => (
-            <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
-              <FormLabel htmlFor="address" fontWeight={"normal"}>
-                Company Address
-              </FormLabel>
-              <Textarea id="address" placeholder="Company Address" {...field} />
-              <ErrorMessage
-                name="address"
-                render={(msg) => <Error msg={msg} />}
-              />
-            </FormControl>
-          )}
-        </Field>
-      </FormControl>
-
+      <Field
+        name="address"
+        validate={(value) => {
+          if (!value) {
+            return "Company Address is required";
+          }
+          const wordCount = value.split(/\s+/).length;
+          if (wordCount < 30) {
+            return "Company Address cannot exceed 30 words";
+          }
+        }}
+      >
+        {({ field }) => (
+          <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
+            <FormLabel htmlFor="address" fontWeight={"normal"}>
+              Company Address
+            </FormLabel>
+            <Textarea
+              id="address"
+              placeholder="Company Address"
+              {...field}
+              onInput={(e) => {
+                const wordCount = e.target.value.split(/\s+/).length;
+                if (wordCount > 30) {
+                  e.target.setCustomValidity("Company Address cannot exceed 30 words");
+                } else {
+                  e.target.setCustomValidity("");
+                }
+              }}
+            />
+            <ErrorMessage name="address" render={(msg) => <Error msg={msg} />} />
+          </FormControl>
+        )}
+      </Field>
+    </FormControl>
+    
+    
       <Flex mt={4}>
         <FormControl mr="5%">
           <Field name="city">
@@ -572,7 +593,7 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
   const [amount, setAmount] = useState(0);
   const [paytmParams, setPaytmParams] = useState(null);
   const [memberBulletingFees, setMemberBulletingFees] = useState("");
-  const [admissionfees, setAdmissionFees] = useState("");
+  const [admissionFees, setAdmissionFees] = useState("");
   const [membershipSubscripationFees, setMembershipSubscripationFees] =
     useState("");
   const [otherAmount, setOtherAmount] = useState("");
@@ -580,26 +601,12 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
   const [petronBulletinFees, setPetronBulletinFees] = useState("");
   const [gstAmount, setGstAmount] = useState("");
 
-  // const calculateSum = () => {
-  //   const num1 = parseFloat(values.memberBulletingFees) || 0;
-  //   const num2 = parseFloat(values.membershipSubscripationFees) || 0;
-  //   const num3 = parseFloat(values.gstAmount) || 0;
-  //   // return num1 + num2 + num3;
-  //   const sum = num1 + num2 + num3;
-  //   setAmount(sum);
-  //   return sum;
-  //   // console.log("first", data);
-  // };
-
-  // const sum = calculateSum();
-  // // console.log("first", sum);
-
   useEffect(() => {
     const calculateSum = () => {
       const num1 = parseFloat(values.memberBulletingFees) || 0;
       const num2 = parseFloat(values.membershipSubscripationFees) || 0;
       const num3 = parseFloat(values.gstAmount) || 0;
-      const num4 = parseFloat(values.admissionfees) || 0;
+      const num4 = parseFloat(values.admissionFees) || 0;
       const num5 = parseFloat(values.otherAmount) || 0;
       const num6 = parseFloat(values.petronFees) || 0;
       const num7 = parseFloat(values.petronBulletinFees) || 0;
@@ -628,6 +635,9 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
       firstDate: e.target.value,
       endDate: endDate.toISOString().split("T")[0],
     };
+
+    setFieldValue("endDate", endDate);
+    setFieldValue("startDate", selectedDate)
     setStartDate(updatedDateRange);
 
     calculateTotalDays(updatedDateRange);
@@ -647,9 +657,15 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(startDate.firstDate);
-    console.log(startDate.endDate);
-    console.log(totalDays);
+
+    const start = new Date(values.startDate.firstDate);
+    const end = new Date(values.startDate.endDate);
+    const calculatedEndDate = new Date(values.startDate.endDate);
+    calculatedEndDate.setDate(start.getDate() + totalDays); // Assuming totalDays is a valid variable
+
+    console.log("Start Date:", start.toISOString().split("T")[0]);
+    console.log("Calculated End Date:", calculatedEndDate.toISOString().split("T")[0]);
+    console.log("Total Days:", totalDays);
   };
 
   return (
@@ -666,7 +682,7 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
               </FormLabel>
               <Field as={Select} {...field} id="membershipType">
                 <option value="yearly">Yearly</option>
-                <option value="patron">Patron (life time)</option>
+                <option value="petron">Patron (life time)</option>
               </Field>
               <ErrorMessage
                 name="membershipType"
@@ -706,7 +722,7 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
         </Field>
       </FormControl>
 
-      {values?.membershipType == "patron" && (
+      {values?.membershipType == "petron" && (
         <FormControl mr="5%">
           <Field name="entryDate">
             {({ field }) => (
@@ -742,7 +758,7 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
                   <Input
                     type="date"
                     id="startDate"
-                    value={startDate.firstDate}
+                    value={values.startDate.firstDate}
                     onChange={handleFirstDateChange}
                   />
                   <ErrorMessage
@@ -784,26 +800,26 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
       {values?.membershipType == "yearly" && (
         <Flex>
           <FormControl mr="5%">
-            <Field name="admissionfees">
+            <Field name="admissionFees">
               {({ field }) => (
                 <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
                   <FormLabel
-                    htmlFor="admissionfees"
+                    htmlFor="admissionFees"
                     fontWeight={"normal"}
                   >
-                    admission fees
+                    Admission Fees
                   </FormLabel>
                   <Input
                     type="number"
-                    id="admissionfees"
+                    id="admissionFees"
                     placeholder="Admission Fees"
-                    name="admissionfees"
-                    value={admissionfees}
+                    name="admissionFees"
+                    value={admissionFees}
                     onChange={handleChange}
                     {...field}
                   />
                   <ErrorMessage
-                    name="admissionfees"
+                    name="admissionFees"
                     render={(msg) => <Error msg={msg} />}
                   />
                 </FormControl>
@@ -815,13 +831,13 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
               {({ field }) => (
                 <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
                   <FormLabel htmlFor="memberBulletingFees" fontWeight={"normal"}>
-                    member bulletin fees
+                    Member Bulleting Fees
                   </FormLabel>
                   <Input
                     type="number"
                     id="memberBulletingFees"
                     name="memberBulletingFees"
-                    placeholder="Member Bulleting Fees "
+                    placeholder="Member Bulleting Fees"
                     value={memberBulletingFees}
                     onChange={handleChange}
                     {...field}
@@ -912,29 +928,29 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
           </FormControl>
         </Flex>
       )}
-      {values?.membershipType == "patron" && (
+      {values?.membershipType == "petron" && (
         <Flex>
           <FormControl mr="5%">
-            <Field name="admissionfees">
+            <Field name="admissionFees">
               {({ field }) => (
                 <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
                   <FormLabel
-                    htmlFor="admissionfees"
+                    htmlFor="admissionFees"
                     fontWeight={"normal"}
                   >
-                    admission fees
+                    admission Fees
                   </FormLabel>
                   <Input
                     type="number"
-                    id="admissionfees"
+                    id="admissionFees"
                     placeholder="Admission Fees"
-                    name="admissionfees"
-                    value={admissionfees}
+                    name="admissionFees"
+                    value={admissionFees}
                     onChange={handleChange}
                     {...field}
                   />
                   <ErrorMessage
-                    name="admissionfees"
+                    name="admissionFees"
                     render={(msg) => <Error msg={msg} />}
                   />
                 </FormControl>
@@ -1049,12 +1065,12 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
             {({ field }) => (
               <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
                 <FormLabel htmlFor="amount" fontWeight={"normal"}>
-                  Amount
+                  Total Amout
                 </FormLabel>
                 <Input
                   type="number"
                   id="amount"
-                  placeholder="Amount"
+                  placeholder="Total Amout"
                   name="amount"
                   value={amount}
                   readOnly
@@ -1074,7 +1090,7 @@ const Form3 = ({ values, setFieldValue, categories, handleChange }) => {
         </FormControl>
       </Flex>
 
-      {values?.membershipType == "patron" && (
+      {values?.membershipType == "petron" && (
         <FormControl as={GridItem} colSpan={[6, 3]}>
           <Field as="Checkbox" name="isSubscribeToBulletin">
             {({ field }) => (
@@ -1150,6 +1166,7 @@ export default function Memberships({ data }) {
               ) : step === 2 ? (
                 <Form2 setFieldValue={setFieldValue} values={values} />
               ) : (
+
                 <Form3
                   setFieldValue={setFieldValue}
                   values={values}

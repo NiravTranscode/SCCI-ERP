@@ -4,8 +4,6 @@ import { ButtonGroup } from 'react-bootstrap'
 import profileImg from '../../Assest/images/alt_profile.jpg'
 import { useNavigate } from 'react-router-dom'
 function Membercard({ data, openModel, setSelectedId }) {
-    console.log(data,'dls')
-
     const navigate = useNavigate()
     const heandleClick = (id) => {
         navigate(`/members_details/${id}`)
@@ -21,7 +19,7 @@ function Membercard({ data, openModel, setSelectedId }) {
                     <Image
                         src={data?.profilePhoto || profileImg}
                         onError={({ currentTarget }) => {
-                            currentTarget.onerror = null; // prevents looping
+                            currentTarget.onerror = null;
                             currentTarget.src = profileImg;
                         }}
                         alt='Green double couch with wooden legs'
@@ -36,25 +34,24 @@ function Membercard({ data, openModel, setSelectedId }) {
                             {data?.phone}
                         </Text>
                         <Text>
+                            {data?.userId}
+                        </Text>
+                        <Text>
                             {data?.email}
                         </Text>
-
                     </Stack>
                 </CardBody>
 
                 <CardFooter >
-                   
-                        <Button variant='solid' size={'sm'} colorScheme='blue' onClick={() => heandleClick(data?._id)}>
-                            Details
-                        </Button>
-                        <Button variant='solid' size={'sm'} colorScheme='green' ml={2} onClick={() => navigate(`/members/edit/${data?._id}`)}>
-                            Edit
-                        </Button>
-                        <Button variant='solid' size={'sm'} colorScheme='orange' ml={2} onClick={() => handleOpenDeletePop(data?._id)}>
-                            Delete
-                        </Button>
-
-                   
+                    <Button variant='solid' size={'sm'} colorScheme='blue' onClick={() => heandleClick(data?._id)}>
+                        Details
+                    </Button>
+                    <Button variant='solid' size={'sm'} colorScheme='green' ml={2} onClick={() => navigate(`/members/edit/${data?._id}`)}>
+                        Edit
+                    </Button>
+                    <Button variant='solid' size={'sm'} colorScheme='orange' ml={2} onClick={() => handleOpenDeletePop(data?._id)}>
+                        Delete
+                    </Button>
                 </CardFooter>
             </Card>
         </>

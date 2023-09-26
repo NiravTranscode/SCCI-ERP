@@ -85,7 +85,6 @@ const Login = () => {
                                             <Field name="email">
                                                 {({ field }) => (
                                                     <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
-
                                                         <Input
                                                             type="text"
                                                             id="email"

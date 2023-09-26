@@ -1,19 +1,4 @@
 export const initialValues = {
-  // user1: {
-  //   profilePhoto: "",
-  //   name: "",
-  //   phone: "",
-  //   gender: "",
-  //   email: "",
-  // },
-  // user2: {
-  //   profilePhoto2: "",
-  //   name2: "",
-  //   phone2: "",
-  //   gender2: "",
-  //   email2: "",
-  // },
-
   name: "",
   name2: "",
   phone: "",
@@ -34,15 +19,21 @@ export const initialValues = {
   companyWhatsappNumber: "",
   website: "",
   businessDetails: "",
-  about: "",
-  companyPhoto: [],
+  about: "", 
 
+  membershipType:"petron",
+  entryDate:new Date(),
+  petronFees:"",  
+  petronBulletinFees:"",
+  
   membershipType: "yearly",
   category: "",
   startDate: new Date(),
   endDate: new Date(),
+  admissionFees:"",
   membershipSubscripationFees: "",
   memberBulletingFees: "",
+  otherAmount:"",
   gstAmount: "",
   amount: 0,
   pendingAmount: "",
