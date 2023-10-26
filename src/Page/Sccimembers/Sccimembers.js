@@ -379,44 +379,25 @@ const Form2 = ({ values, setFieldValue }) => {
           </Field>
         </FormControl>
       </Flex>
-      <FormControl as={GridItem} colSpan={[6, 6, null, 2]}>
-      <Field
-        name="address"
-        validate={(value) => {
-          if (!value) {
-            return "Company Address is required";
-          }
-          const wordCount = value.split(/\s+/).length;
-          if (wordCount < 30) {
-            return "Company Address cannot exceed 30 words";
-          }
-        }}
-      >
-        {({ field }) => (
-          <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
-            <FormLabel htmlFor="address" fontWeight={"normal"}>
-              Company Address
-            </FormLabel>
-            <Textarea
-              id="address"
-              placeholder="Company Address"
-              {...field}
-              onInput={(e) => {
-                const wordCount = e.target.value.split(/\s+/).length;
-                if (wordCount > 30) {
-                  e.target.setCustomValidity("Company Address cannot exceed 30 words");
-                } else {
-                  e.target.setCustomValidity("");
-                }
-              }}
-            />
-            <ErrorMessage name="address" render={(msg) => <Error msg={msg} />} />
-          </FormControl>
-        )}
-      </Field>
-    </FormControl>
-    
-    
+      <FormControl>
+        <Field
+          name="address">
+          {({ field }) => (
+            <FormControl style={{ marginTop: 10, marginBottom: 12 }}>
+              <FormLabel htmlFor="address" fontWeight={"normal"}>
+                Company Address
+              </FormLabel>
+              <Input
+                type="text"
+                id="address"
+                placeholder="Company Address"
+                {...field}
+              />
+              <ErrorMessage name="address" render={(msg) => <Error msg={msg} />} />
+            </FormControl>
+          )}
+        </Field>
+      </FormControl>
       <Flex mt={4}>
         <FormControl mr="5%">
           <Field name="city">
